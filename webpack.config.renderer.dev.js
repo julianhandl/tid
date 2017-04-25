@@ -13,6 +13,7 @@ import merge from "webpack-merge"
 import { spawn, execSync } from "child_process"
 import ExtractTextPlugin from "extract-text-webpack-plugin"
 import baseConfig from "./webpack.config.base"
+import LessVariables from "./app/global.variables.js"
 
 const port = process.env.PORT || 1212
 const publicPath = `http://localhost:${port}/dist`
@@ -78,7 +79,8 @@ export default merge.smart(baseConfig, {
                     {
                         loader: "less-loader",
                         options: {
-                            sourceMap: true
+                            sourceMap: true,
+                            modifyVars: LessVariables
                         }
                     }
                 ]

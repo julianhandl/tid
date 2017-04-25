@@ -1,8 +1,7 @@
 {
-  "extends": "stylelint-config-standard",
   "rules": {
     "indentation": "4",
     "number-leading-zero": null,
-    "unit-whitelist": ["px", "%", "vw", "vh"]
+    "unit-whitelist": ["px", "%", "vw", "vh"],
   }
 }

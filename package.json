@@ -1,7 +1,7 @@
 {
   "name": "tid-tracker",
   "productName": "tid-tracker",
-  "version": "0.1",
+  "version": "0.0.1",
   "description": "Minimal timetracker built with electron and react",
   "main": "main.js",
   "scripts": {
@@ -164,6 +164,7 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^19.0.2",
     "jsdom": "^9.12.0",
+    "less": "^2.7.2",
     "less-loader": "^4.0.3",
     "minimist": "^1.2.0",
     "node-sass": "^4.5.2",

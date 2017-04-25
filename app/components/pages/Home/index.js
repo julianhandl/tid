@@ -1,12 +1,13 @@
 // @flow
 import React, { Component } from "react"
-import "./Home.css"
+import TrackerSingle from "../../widgets/Tracker/TrackerSingle"
+import "./Home.less"
 
 export default class Home extends Component {
     render() {
         return (
             <div>
-                <div data-tid="container" />
+                <TrackerSingle />
             </div>
         )
     }

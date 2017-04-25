@@ -1,0 +1,34 @@
+Structure
+
+- Tracker
+    - Header
+        - Status
+        - Add
+    - Clock
+        - Play/Pause
+        - Time
+        - Stop
+    - Description
+        - Input Wrapper
+            - Time Indicator
+            - Input
+
+store
+
+Tracker Object:
+{
+    closed: bool // if stopped
+    logs: [{ // create a log on start and after pause and restart
+        start: Date // set on start
+        end: Date // set on pause or stop
+    }]
+    totalMin: int // set on stop
+    project: string // set on stop
+    client: string // set on stop
+}
+
+Ticker
+Object in the store that has a now Date object and is updated ever 2000ms
+Time critical component connect to the ticker object to receive a rerender
+on ticker change. Compare the now Date to the start of the latest log
+and show logged time.
