@@ -27,7 +27,7 @@ function newTracker() {
 }
 
 const initialState = {
-    trackers: [newTracker()] // TODO: Set loaded data or empty tracker
+    trackers: [] // TODO: Set loaded data or empty tracker
 }
 
 export default function activeTrackers(state = initialState, action) {
