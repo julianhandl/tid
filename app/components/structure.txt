@@ -14,7 +14,6 @@ Structure
             - Input
 
 store
-
 Tracker Object:
 {
     closed: bool // if stopped
@@ -26,6 +25,8 @@ Tracker Object:
     project: string // set on stop
     client: string // set on stop
 }
+initial:
+    load data from disk, if no data set new empty tracker
 
 Ticker
 Object in the store that has a now Date object and is updated ever 2000ms
