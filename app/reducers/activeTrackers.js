@@ -27,7 +27,7 @@ function newTracker() {
 }
 
 const initialState = {
-    trackers: [] // TODO: Set loaded data or empty tracker
+    trackers: [newTracker()] // TODO: Set loaded data or empty tracker
 }
 
 export default function activeTrackers(state = initialState, action) {
@@ -47,8 +47,8 @@ export default function activeTrackers(state = initialState, action) {
                 if(t.id === action.tracker){
                     return {
                         ...t,
-                        logs: t.logs.map((l, index, length) => {
-                            if(index+1 === length){
+                        logs: t.logs.map((l, index, all) => {
+                            if(index+1 === all.length){
                                 return {
                                     ...l,
                                     start: Date.now()
@@ -69,16 +69,16 @@ export default function activeTrackers(state = initialState, action) {
                     return {
                         ...t,
                         logs: [
-                            ...t.logs.map((l, index, length) => {
-                                if(index+1 === length){
+                            ...t.logs.map((l, index, all) => {
+                                if(index+1 === all.length){
                                     return {
                                         ...l,
-                                        stop: Date.now()
+                                        end: Date.now()
                                     }
                                 }
                                 else return l
                             }),
-                            newTracker()
+                            newLog()
                         ]
                     }
                 }

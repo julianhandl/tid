@@ -6,27 +6,36 @@ import Stop from "../../../Icons/Stop"
 import Time from "./Time"
 
 import {
-  startTracker
+  startTracker,
+  pauseTracker
 } from "../../../../../actions/activeTrackers"
 
-@connect((state)=>{
+@connect(({activeTrackers:{trackers}})=>{
+    let tracker = trackers[0]
+    let lastLog = tracker.logs[tracker.logs.length - 1]
     return {
-        tracker: "bla"
+        trackerId: tracker.id,
+        running: lastLog.start && lastLog.end == null
     }
 },{
-    startTracker
+    startTracker,
+    pauseTracker
 })
 export default class Clock extends React.Component{
+    shouldComponentUpdate(nextProps){
+        return (
+            this.props.running !== nextProps.running
+        )
+    }
     render(){
-        console.log(this.props)
         let statusClass = "tracker-single-status-toggle" + (this.props.running ? " running" : " paused")
         return(
             <div className="tracker-single-clock">
                 <div className={statusClass}>
-                    <Play onClick={()=>{this.props.startTracker(this.props.tracker.id)}} />
-                    { false ? <Pause /> : null }
+                    <Play onClick={()=>{this.props.startTracker(this.props.trackerId)}} />
+                    <Pause onClick={()=>{this.props.pauseTracker(this.props.trackerId)}} />
                 </div>
-                <Time />
+                <Time trackerId={this.props.trackerId} />
                 <div className="tracker-single-stop">
                     <Stop />
                 </div>

@@ -4,30 +4,26 @@
       "targets": { "node": 6 },
       "useBuiltIns": true
     }],
+    "es2015",
     "stage-0",
     "react"
   ],
   "plugins": [
-      "add-module-exports",
-      "transform-decorators",
-      "transform-decorators-legacy"
+      "add-module-exports"
   ],
   "env": {
     "production": {
       "presets": ["react-optimize"],
       "plugins": [
+          "transform-decorators-legacy",
           "babel-plugin-dev-expression"
       ]
     },
     "development": {
       "plugins": [
+        "transform-decorators-legacy",
         "transform-class-properties",
-        "transform-es2015-classes",
         "react-hot-loader/babel",
-        ["flow-runtime", {
-          "assert": true,
-          "annotate": true
-        }]
       ]
     }
   }
