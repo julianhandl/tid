@@ -2,13 +2,17 @@ import {
     ADD_TRACKER,
     START_TRACKER,
     PAUSE_TRACKER,
-    STOP_TRACKER
+    STOP_TRACKER,
+    SET_TRACKER_DESCRIPTION,
+    SET_TRACKER_PROJECT,
+    SET_TRACKER_CLIENT
 } from "../actions/activeTrackers.js"
 
 function newLog() {
     return {
         start: null,
-        end: null
+        end: null,
+        total: null
     }
 }
 
@@ -71,9 +75,11 @@ export default function activeTrackers(state = initialState, action) {
                         logs: [
                             ...t.logs.map((l, index, all) => {
                                 if(index+1 === all.length){
+                                    let now = Date.now()
                                     return {
                                         ...l,
-                                        end: Date.now()
+                                        end: now,
+                                        total: now - l.start
                                     }
                                 }
                                 else return l
@@ -92,9 +98,21 @@ export default function activeTrackers(state = initialState, action) {
             ...state,
             trackers: state.trackers.map(t => {
                 if(t.id === action.tracker){
-                    let logs = t.logs.filter(l => l.start && l.end)
+                    let logs = t.logs.map(l => {
+                        if(l.start && l.end) return l
+                        if(l.start && l.end == null){
+                            let now = Date.now()
+                            return {
+                                start: l.start,
+                                end: l.end,
+                                total: now - l.start
+                            }
+                        }
+                        return undefined
+                    }).filter(l => l.total)
                     let totalMinutes = logs.reduce((comb, log) => {
-                        return comb + ((log.end - log.start) / 1000 / 60)
+                        if(log.total) return comb + log.total
+                        return comb
                     }, 0)
                     let firstLog = logs.length > 0 ? logs[0].start : null
                     let lastLog = firstLog ? logs[logs.length-1].end : null
@@ -110,6 +128,45 @@ export default function activeTrackers(state = initialState, action) {
                     }
                 }
                 return t
+            })
+        }
+    case SET_TRACKER_DESCRIPTION:
+        return {
+            ...state,
+            trackers: state.trackers.map(t => {
+                if(action.tracker === t.id){
+                    return {
+                        ...t,
+                        description: action.payload.value
+                    }
+                }
+                else return t
+            })
+        }
+    case SET_TRACKER_PROJECT:
+        return {
+            ...state,
+            trackers: state.trackers.map(t => {
+                if(action.tracker === t.id){
+                    return {
+                        ...t,
+                        project: action.payload.value
+                    }
+                }
+                else return t
+            })
+        }
+    case SET_TRACKER_CLIENT:
+        return {
+            ...state,
+            trackers: state.trackers.map(t => {
+                if(action.tracker === t.id){
+                    return {
+                        ...t,
+                        client: action.payload.value
+                    }
+                }
+                else return t
             })
         }
     default:

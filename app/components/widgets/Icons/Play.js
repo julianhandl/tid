@@ -1,4 +1,5 @@
 import React from "react"
+import Variables from "../../../global.variables"
 
 export default class Play extends React.Component {
     render() {
@@ -12,7 +13,7 @@ export default class Play extends React.Component {
                     if (this.props.onClick) this.props.onClick(e)
                 }}
             >
-                <polygon points="1,0 14,8 1,15" fill="#ffffff" />
+                <polygon points="1,0 14,8 1,15" fill={Variables["color-success"]} />
             </svg>
         )
     }

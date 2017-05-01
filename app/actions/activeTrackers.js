@@ -33,3 +33,33 @@ export function stopTracker(id) {
         tracker: id
     }
 }
+
+export function setTrackerDescription(id, val){
+    return {
+        type: SET_TRACKER_DESCRIPTION,
+        tracker: id,
+        payload: {
+            value: val
+        }
+    }
+}
+
+export function setTrackerProject(id, val){
+    return {
+        type: SET_TRACKER_PROJECT,
+        tracker: id,
+        payload: {
+            value: val
+        }
+    }
+}
+
+export function setTrackerClient(id, val){
+    return {
+        type: SET_TRACKER_CLIENT,
+        tracker: id,
+        payload: {
+            value: val
+        }
+    }
+}

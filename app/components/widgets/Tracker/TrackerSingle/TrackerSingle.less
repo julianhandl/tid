@@ -37,6 +37,13 @@
     width: 15px;
     height: 15px;
 
+    .icon-pause:hover polygon{
+        fill: @color-text;
+    }
+    .icon-play:hover polygon{
+        fill: @color-text;
+    }
+
     &.paused{
         .icon-play{
             display: block;
@@ -44,12 +51,6 @@
         .icon-pause{
             display: none;
         }
-        /*
-        &:hover{
-            .icon-play{ display: none; }
-            .icon-pause{ display: block; }
-        }
-        */
     }
     &.running{
         .icon-play{
@@ -58,12 +59,6 @@
         .icon-pause{
             display: block;
         }
-        /*
-        &:hover{
-            .icon-play{ display: block; }
-            .icon-pause{ display: none; }
-        }
-        */
     }
 }
 
@@ -72,4 +67,25 @@
     top: 50%;
     right: 0px;
     margin-top: -8px;
+
+    .icon-stop:hover polygon{
+        fill: @color-text !important;
+    }
+}
+
+.tracker-single-description{
+    display: block;
+    margin-top: 15px;
+    background: @color-input-dark;
+    input{
+        display: block;
+        width: 100%;
+        background: transparent;
+        color: @color-text;
+        border: 0;
+        font-size: 14px;
+        font-weight: 300;
+        padding: 9px 16px;
+        outline: none;
+    }
 }

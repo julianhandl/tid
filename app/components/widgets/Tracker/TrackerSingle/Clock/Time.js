@@ -6,21 +6,19 @@ import {connect} from "react-redux"
     let lastLog = tracker.logs[tracker.logs.length-1]
     let active = lastLog.start && lastLog.end === null ? true : false
 
-    let minutes = 0
-    if(active){
-        minutes = tracker.logs.reduce((val,log)=>{
-            if(log.start && log.end){
-                return val + ((log.end - log.start)/1000/60)
-            }
-            else if(log.start && log.end === null){
-                return val + ((ticker - log.start)/1000/60)
-            }
-            else return val
-        },0)
-    }
+    let minutes = tracker.logs.reduce((val,log)=>{
+        if(log.total){
+            return val + (log.total/1000/60)
+        }
+        else if(log.start && log.end === null){
+            return val + ((ticker - log.start)/1000/60)
+        }
+        else return val
+    },0)
+
     return {
         active: active,
-        minutes: minutes
+        minutes: Math.floor(minutes)
     }
 },{})
 export default class Time extends React.Component{
@@ -30,14 +28,16 @@ export default class Time extends React.Component{
             this.props.minutes !== nextProps.minutes
         )
     }
+    leftPad = val => {
+        let padded = `00${val}`
+        return padded.substr(padded.length - 2,padded.length)
+    }
     render(){
-        let minutes = this.props.minutes
+        let hours = Math.floor(this.props.minutes/60)
+        let minutes = this.props.minutes - (hours*60)
         return(
             <div className="tracker-single-clock-time">
-                {minutes > 59 ?
-                    `${Math.floor(minutes/60)}:${Math.floor(minutes-(Math.floor(minutes/60)*60))}` :
-                    `0:${Math.floor(minutes)}`
-                }
+                {`${this.leftPad(hours)}:${this.leftPad(minutes)}`}
             </div>
         )
     }

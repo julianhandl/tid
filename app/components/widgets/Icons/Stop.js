@@ -1,5 +1,5 @@
 import React from "react"
-import Variables from "../../../global.variables.js"
+import Variables from "../../../global.variables"
 
 export default class Stop extends React.Component {
     render() {
@@ -14,7 +14,7 @@ export default class Stop extends React.Component {
                 }}
             >
                 <polygon points="0,0 15,0 15,15 0,15"
-                    fill={Variables["color-text"]}
+                    fill={Variables["color-danger"]}
                 />
             </svg>
         )
