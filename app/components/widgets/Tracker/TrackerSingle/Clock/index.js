@@ -4,10 +4,12 @@ import Play from "../../../Icons/Play"
 import Pause from "../../../Icons/Pause"
 import Stop from "../../../Icons/Stop"
 import Time from "./Time"
+import "./Clock.less"
 
 import {
   startTracker,
-  pauseTracker
+  pauseTracker,
+  stopTracker
 } from "../../../../../actions/activeTrackers"
 
 @connect(({activeTrackers:{trackers}})=>{
@@ -19,7 +21,8 @@ import {
     }
 },{
     startTracker,
-    pauseTracker
+    pauseTracker,
+    stopTracker
 })
 export default class Clock extends React.Component{
     shouldComponentUpdate(nextProps){
@@ -37,7 +40,7 @@ export default class Clock extends React.Component{
                 </div>
                 <Time trackerId={this.props.trackerId} />
                 <div className="tracker-single-stop">
-                    <Stop />
+                    <Stop onClick={()=>{this.props.stopTracker(this.props.trackerId)}} />
                 </div>
             </div>
         )

@@ -2,6 +2,9 @@ export const ADD_TRACKER = "ADD_TRACKER"
 export const PAUSE_TRACKER = "PAUSE_TRACKER"
 export const START_TRACKER = "START_TRACKER"
 export const STOP_TRACKER = "STOP_TRACKER"
+export const DELETE_TRACKER = "DELETE_TRACKER"
+export const START_SAVING = "START_SAVING"
+export const CANCEL_SAVING = "CANCEL_SAVING"
 
 export const SET_TRACKER_DESCRIPTION = "SET_TRACKER_DESCRIPTION"
 export const SET_TRACKER_PROJECT = "SET_TRACKER_PROJECT"
@@ -30,6 +33,30 @@ export function startTracker(id) {
 export function stopTracker(id) {
     return {
         type: STOP_TRACKER,
+        tracker: id
+    }
+}
+
+export function deleteTracker(id){
+    return {
+        type: DELETE_TRACKER,
+        tracker: id
+    }
+}
+
+export function startSaving(id, totalMinutes){
+    return {
+        type: START_SAVING,
+        tracker: id,
+        payload: {
+            totalMinutes
+        }
+    }
+}
+
+export function cancelSaving(id){
+    return{
+        type: CANCEL_SAVING,
         tracker: id
     }
 }

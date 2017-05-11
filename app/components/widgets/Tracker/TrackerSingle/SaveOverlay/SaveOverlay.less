@@ -1,0 +1,63 @@
+@import (reference) "../../../../../global.less";
+
+.tracker-single-save-time-control{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 64px;
+    margin-top: 5px;
+}
+.tracker-single-delete{
+    font-size: 20px;
+    font-weight: 700;
+    cursor: default;
+    color: @color-danger;
+}
+.tracker-single-save{
+    font-size: 20px;
+    font-weight: 700;
+    cursor: default;
+    color: @color-success;
+}
+.tracker-single-save-time-input{
+    display: flex;
+    justify-content: center;
+    input{
+        display: inline-block;
+        width: 49px;
+        background: transparent;
+        color: @color-text;
+        border: 0;
+        border-bottom: 1px solid @color-action;
+        font-family: @font-family;
+        font-size: 44px;
+        line-height: 50px;
+        font-weight: 700;
+        padding: 0;
+        outline: none;
+        &:first-child{
+            text-align: right;
+        }
+        &:last-child{
+            text-align: left;
+        }
+    }
+    span{
+        font-size: 44px;
+        line-height: 50px;
+        font-weight: 700;
+    }
+}
+
+.tracker-single-project-selects{
+    margin-top: 20px;
+}
+.tracker-single-project-select{
+    display: flex;
+    justify-content: space-between;
+    label{
+        font-family: @font-family;
+        font-size: 16px;
+        font-weight: 700;
+    }
+}

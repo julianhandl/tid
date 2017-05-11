@@ -4,6 +4,7 @@
 @color-status-paused: "";
 @color-input-dark: "";
 
+@color-action: "";
 @color-danger: "";
 @color-warning: "";
 @color-success: "";
@@ -12,13 +13,17 @@
 @padding-input-large: "";
 @padding-input: "";
 
+@font-family: "Open Sand", sans-serif;
+
 *{
     box-sizing: border-box;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 body{
     margin: 0;
     background: #000;
-    font-family: "Open Sand", sans-serif;
+    font-family: @font-family;
     color: @color-text;
 }

@@ -1,0 +1,54 @@
+@import (reference) "../../../../../global.less";
+
+.tracker-single-clock{
+    position: relative;
+    width: 100%;
+    height: 64px;
+    margin-top: 5px;
+    text-align: center;
+}
+
+.tracker-single-status-toggle{
+    position: absolute;
+    top: 50%;
+    left: 0px;
+    margin-top: -8px;
+    display: block;
+    width: 15px;
+    height: 15px;
+
+    .icon-pause:hover polygon{
+        fill: @color-text;
+    }
+    .icon-play:hover polygon{
+        fill: @color-text;
+    }
+
+    &.paused{
+        .icon-play{
+            display: block;
+        }
+        .icon-pause{
+            display: none;
+        }
+    }
+    &.running{
+        .icon-play{
+            display: none;
+        }
+        .icon-pause{
+            display: block;
+        }
+    }
+}
+
+.tracker-single-stop{
+    position: absolute;
+    top: 50%;
+    right: 0px;
+    margin-top: -8px;
+
+    .icon-stop:hover polygon{
+        fill: @color-text !important;
+    }
+}

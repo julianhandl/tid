@@ -1,6 +1,7 @@
 const red = "#ef7669"
 const yellow = "#ffce5b"
 const green = "#8edd90"
+const blue = "#5464f6"
 const lightGrey = "#d4d7e0"
 const grey = "#353844"
 const darkGrey = "#262831"
@@ -11,6 +12,7 @@ const colors = {
     "color-status-running": red,
     "color-status-paused": lightGrey,
     "color-input-dark": grey,
+    "color-action": blue,
     "color-danger": red,
     "color-warning": yellow,
     "color-success": green
