@@ -1,11 +1,10 @@
 import React from "react"
 import {connect} from "react-redux"
-import "./Time.less"
 
-@connect(({activeTrackers:{trackers},ticker},props)=>{
-    let tracker = trackers.find(t => t.id === props.trackerId)
+@connect(({trackers:{activeTrackers},ticker},props)=>{
+    let tracker = activeTrackers.find(t => t.id === props.trackerId)
     let lastLog = tracker.logs[tracker.logs.length-1]
-    let active = lastLog.start && lastLog.end === null ? true : false
+    let active = lastLog.start && lastLog.end === null
 
     let minutes = tracker.logs.reduce((val,log)=>{
         if(log.total){
@@ -37,7 +36,7 @@ export default class Time extends React.Component{
         let hours = Math.floor(this.props.minutes/60)
         let minutes = this.props.minutes - (hours*60)
         return(
-            <div className="tracker-single-clock-time">
+            <div className="tracker-clock-time">
                 <span>{`${this.leftPad(hours)}`}</span>
                 <span>:</span>
                 <span>{`${this.leftPad(minutes)}`}</span>

@@ -1,0 +1,36 @@
+.click-input{
+    display: flex;
+    height: 25px;
+    align-items: center;
+    width: 100%;
+    cursor: default;
+
+    .click-input-control{
+        display: block;
+        position: relative;
+        width: 15px;
+        height: 25px;
+        margin-right: 5px;
+        svg{
+            width: 11px;
+            height: 11px;
+        }
+        svg:first-child{
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        svg:last-child{
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+    }
+    .click-input-label{
+        display: block;
+        width: 100%;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+}

@@ -12,8 +12,8 @@ import {
   stopTracker
 } from "../../../../../actions/activeTrackers"
 
-@connect(({activeTrackers:{trackers}})=>{
-    let tracker = trackers[0]
+@connect(({trackers:{activeTrackers}})=>{
+    let tracker = activeTrackers[0]
     let lastLog = tracker.logs[tracker.logs.length - 1]
     return {
         trackerId: tracker.id,

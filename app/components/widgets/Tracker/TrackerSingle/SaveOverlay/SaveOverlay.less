@@ -19,6 +19,9 @@
     cursor: default;
     color: @color-success;
 }
+.tracker-single-save-time{
+    margin-bottom: 15px;
+}
 .tracker-single-save-time-input{
     display: flex;
     justify-content: center;
@@ -50,7 +53,7 @@
 }
 
 .tracker-single-project-selects{
-    margin-top: 20px;
+    margin-top: 12px;
 }
 .tracker-single-project-select{
     display: flex;
@@ -58,6 +61,17 @@
     label{
         font-family: @font-family;
         font-size: 16px;
+        line-height: 25px;
         font-weight: 700;
+        margin-right: 20px;
+        min-width: 60px;
+    }
+
+    &+ .tracker-single-project-select{
+        margin-top: 9px;
+    }
+    
+    .click-input{
+        width: 210px;
     }
 }

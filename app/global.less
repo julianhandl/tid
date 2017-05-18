@@ -13,12 +13,13 @@
 @padding-input-large: "";
 @padding-input: "";
 
-@font-family: "Open Sand", sans-serif;
+@font-family: "Open Sans", sans-serif;
 
 *{
     box-sizing: border-box;
     -webkit-user-select: none;
     user-select: none;
+    cursor: default;
 }
 
 body{
@@ -26,4 +27,25 @@ body{
     background: #000;
     font-family: @font-family;
     color: @color-text;
+}
+
+// scrollbars
+::-webkit-scrollbar {
+    width: 4px;
+    background-color: @color-input-dark;
+}
+::-webkit-scrollbar:horizontal {
+    height: 4px;
+    background-color: @color-input-dark;
+}
+::-webkit-scrollbar-track {
+    width: 4px;
+    border-radius: 0px;
+}
+::-webkit-scrollbar-thumb {
+    background-color: @color-action;
+    border-radius: 0px;
+}
+::-webkit-scrollbar-corner{
+    background-color: @color-input-dark;
 }

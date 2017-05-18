@@ -4,8 +4,8 @@ import Time from "./Time"
 import Project from "./Project"
 import "./SaveOverlay.less"
 
-@connect(({activeTrackers:{trackers}},props)=>{
-    let tracker = trackers.find(t => t.id === props.trackerId)
+@connect(({trackers:{activeTrackers}},props)=>{
+    let tracker = activeTrackers.find(t => t.id === props.trackerId)
     return {
         saving: !!tracker.totalMinutes,
         minutes: tracker.logs.reduce((min, log)=>{
@@ -15,6 +15,11 @@ import "./SaveOverlay.less"
 },{
 })
 export default class SaveOverlay extends React.Component{
+    shouldComponentUpdate(nextProps){
+        return this.props.saving !== nextProps.saving ||
+            this.props.trackerId !== nextProps.trackerId ||
+            this.props.minutes !== nextProps.minutes
+    }
     render(){
         return (
             <div>

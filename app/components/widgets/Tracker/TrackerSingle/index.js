@@ -6,25 +6,29 @@ import Description from "./Description"
 import SaveOverlay from "./SaveOverlay"
 import "./TrackerSingle.less"
 
-import {addTracker} from "../../../../actions/activeTrackers"
+@connect(({trackers:{activeTrackers}})=>{
+    let tracker = activeTrackers[0]
+    let lastLog = tracker.logs[tracker.logs.length-1]
 
-@connect(({activeTrackers:{trackers}})=>{
-    let tracker = trackers[0]
     return {
-        running: tracker.logs[tracker.logs.length-1].end === null,
+        running: lastLog.end === null,
         trackerId: tracker.id
     }
 },{})
 export default class TrackerSingle extends React.Component{
+    shouldComponentUpdate(nextProps){
+        return this.props.running !== nextProps.running ||
+            this.props.trackerId !== nextProps.trackerId
+    }
     renderContent = () => {
         if(this.props.running){
-            return <div>
+            return <div className="tracker-single-content">
                 <Header trackerId={this.props.trackerId} />
                 <Clock trackerId={this.props.trackerId} />
             </div>
         }
         else{
-            return <div>
+            return <div className="tracker-single-content save">
                 <SaveOverlay trackerId={this.props.trackerId} />
             </div> // saving state
         }

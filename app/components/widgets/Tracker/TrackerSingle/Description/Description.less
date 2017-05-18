@@ -1,9 +1,17 @@
 @import (reference) "../../../../../global.less";
 
-.tracker-single-description{
-    display: block;
-    margin-top: 15px;
-    background: @color-input-dark;
+.tracker-single{
+    .tracker-description{
+        display: block;
+        margin-top: 12px;
+        background: @color-input-dark;
+        input{
+            padding: 9px 16px;
+        }
+    }
+}
+
+.tracker-description{
     input{
         display: block;
         width: 100%;
@@ -12,7 +20,6 @@
         border: 0;
         font-size: 14px;
         font-weight: 300;
-        padding: 9px 16px;
         outline: none;
     }
 }

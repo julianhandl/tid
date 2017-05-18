@@ -15,7 +15,7 @@ const colors = {
     "color-action": blue,
     "color-danger": red,
     "color-warning": yellow,
-    "color-success": green
+    "color-success": green,
 }
 
 const metrics = {
