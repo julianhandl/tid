@@ -37,11 +37,6 @@ export default class Home extends Component {
         return this.props.activeTrackers !== nextProps.activeTrackers
     }
     componentWillReceiveProps(nextProps){
-        // optimze this so it only ticky when tracker is really active
-        let runningTrackers = nextProps.activeTrackers.filter(t => {
-            return !t.totalMinutes
-        })
-
         if(this.props.runningTrackersLength !== nextProps.runningTrackersLength &&
             nextProps.runningTrackersLength > 0 && !this.tickerInterval
         ){
