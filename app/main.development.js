@@ -38,7 +38,7 @@ app.on("window-all-closed", () => {
 
 app.on("ready", async () => {
     // remember this from last session
-    let sizes = getWindowSize(process, "default")
+    let sizes = getWindowSize(process, undefined, "default")
 
     let browserWidth = sizes.width
     let browserHeight = sizes.height
@@ -52,6 +52,7 @@ app.on("ready", async () => {
     mainWindow = new BrowserWindow({
         title: 'tid',
         show: false,
+        autoHideMenuBar: true,
         width: browserWidth,
         height: browserHeight,
         backgroundColor: '#262831',

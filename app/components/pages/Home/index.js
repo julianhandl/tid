@@ -3,6 +3,7 @@ import {connect} from "react-redux"
 import TrackerSingle from "../../widgets/Tracker/TrackerSingle"
 import TrackerMulti from "../../widgets/Tracker/TrackerMulti"
 import MultiHeader from "../../widgets/Tracker/TrackerMulti/Header"
+import SimpleStats from "../../widgets/SimpleStats"
 import {Translation} from "../../../i18n/Intl"
 import "./Home.less"
 
@@ -71,13 +72,36 @@ export default class Home extends Component {
             return <div><Translation translation="no_tracker" /></div>
         }
     }
-    render(){
-        let view = this.props.windowView
-        let classes = `tid-homepage tid-homepage-view-${view}`
+    renderDefaultView = () => {
         return (
-            <div className={classes}>
+            <div className="tid-homepage tid-homepage-view-default">
                 {this.renderTracker()}
             </div>
         )
+    }
+    renderExtendedView = () => {
+        return (
+            <div className="tid-homepage tid-homepage-view-extended">
+                {this.renderTracker()}
+                <SimpleStats />
+            </div>
+        )
+    }
+    renderStatsView = () => {
+        return (
+            <div className="tid-homepage tid-homepage-view-stats">
+                {this.renderTracker()}
+            </div>
+        )
+    }
+    render(){
+        switch(this.props.windowView){
+        case 'extended':
+            return this.renderExtendedView()
+        case 'stats':
+            return this.renderStatsView()
+        default:
+            return this.renderDefaultView()
+        }
     }
 }

@@ -113,7 +113,7 @@ export default class MenuBuilder {
                         let bounds = this.mainWindow.getBounds()
                         this.mainWindow.setBounds({
                             ...bounds,
-                            ...getWindowSize(process, "default")
+                            ...getWindowSize(process, this.mainWindow, "default")
                         })
                         this.dispatch({
                             type: 'SET_WINDOW_VIEW',
@@ -128,7 +128,7 @@ export default class MenuBuilder {
                         let bounds = this.mainWindow.getBounds()
                         this.mainWindow.setBounds({
                             ...bounds,
-                            ...getWindowSize(process, "extended")
+                            ...getWindowSize(process, this.mainWindow, "extended")
                         })
                         this.dispatch({
                             type: 'SET_WINDOW_VIEW',
@@ -143,7 +143,7 @@ export default class MenuBuilder {
                         let bounds = this.mainWindow.getBounds()
                         this.mainWindow.setBounds({
                             ...bounds,
-                            ...getWindowSize(process, "stats")
+                            ...getWindowSize(process, this.mainWindow, "stats")
                         })
                         this.dispatch({
                             type: 'SET_WINDOW_VIEW',
@@ -235,44 +235,54 @@ export default class MenuBuilder {
                 ]
             },
             {
-                label: "&View",
-                submenu: process.env.NODE_ENV === "development"
-                    ? [
-                        {
-                            label: "&Reload",
-                            accelerator: "Ctrl+R",
-                            click: () => {
-                                this.mainWindow.webContents.reload()
-                            }
-                        },
-                        {
-                            label: "Toggle &Full Screen",
-                            accelerator: "F11",
-                            click: () => {
-                                this.mainWindow.setFullScreen(
-                                      !this.mainWindow.isFullScreen()
-                                  )
-                            }
-                        },
-                        {
-                            label: "Toggle &Developer Tools",
-                            accelerator: "Alt+Ctrl+I",
-                            click: () => {
-                                this.mainWindow.toggleDevTools()
-                            }
+                label: "View",
+                submenu: [
+                    {
+                        label: "Standard View",
+                        accelerator: "Ctrl+j",
+                        click: () => {
+                            let bounds = this.mainWindow.getBounds()
+                            this.mainWindow.setBounds({
+                                ...bounds,
+                                ...getWindowSize(process, this.mainWindow, "default")
+                            })
+                            this.dispatch({
+                                type: 'SET_WINDOW_VIEW',
+                                view: 'default'
+                            })
                         }
-                    ]
-                    : [
-                        {
-                            label: "Toggle &Full Screen",
-                            accelerator: "F11",
-                            click: () => {
-                                this.mainWindow.setFullScreen(
-                                      !this.mainWindow.isFullScreen()
-                                  )
-                            }
+                    },
+                    {
+                        label: "Extended View",
+                        accelerator: "Ctrl+k",
+                        click: () => {
+                            let bounds = this.mainWindow.getBounds()
+                            this.mainWindow.setBounds({
+                                ...bounds,
+                                ...getWindowSize(process, this.mainWindow, "extended")
+                            })
+                            this.dispatch({
+                                type: 'SET_WINDOW_VIEW',
+                                view: 'extended'
+                            })
                         }
-                    ]
+                    },
+                    {
+                        label: "Statistics View",
+                        accelerator: "Ctrl+l",
+                        click: () => {
+                            let bounds = this.mainWindow.getBounds()
+                            this.mainWindow.setBounds({
+                                ...bounds,
+                                ...getWindowSize(process, this.mainWindow, "stats")
+                            })
+                            this.dispatch({
+                                type: 'SET_WINDOW_VIEW',
+                                view: 'stats'
+                            })
+                        }
+                    },
+                ]
             },
             {
                 label: "Help",

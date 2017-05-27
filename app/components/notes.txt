@@ -1,8 +1,4 @@
 Next Steps
-- get rid of the router
-- make a container that handles the windowView and the ticker
-- create a page for all view (standard/extended/stats)
-- render current view with container component
 
 Storage
 - create a settings file with global settings and stuff like recent projects
