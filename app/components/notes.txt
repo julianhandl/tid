@@ -1,0 +1,27 @@
+Next Steps
+- get rid of the router
+- make a container that handles the windowView and the ticker
+- create a page for all view (standard/extended/stats)
+- render current view with container component
+
+Storage
+- create a settings file with global settings and stuff like recent projects
+- create a folder in the project. This folder contains 3 files:
+    - settings
+    - activeTrackers
+    - closedTrackers
+
+Multi User
+- Login with a username
+- Store all users in project settings
+- Group trackers by user
+
+Milestones
+- Tracker Saving
+- Tracker Loading
+- Settings Saving
+- Settings Loading
+- Tracker Mini Stats
+    - Tracker Indexer
+    - Tracker Tracker Stats
+    - Tracker Stats Datepicker

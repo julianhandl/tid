@@ -1,6 +1,5 @@
-/* eslint global-require: 1, flowtype-errors/show-errors: 0 */
-// @flow
 import { app, BrowserWindow } from "electron"
+import getWindowSize from "./utils/windowSize"
 import MenuBuilder from "./menu"
 
 let mainWindow = null
@@ -38,14 +37,26 @@ app.on("window-all-closed", () => {
 })
 
 app.on("ready", async () => {
+    // remember this from last session
+    let sizes = getWindowSize(process, "default")
+
+    let browserWidth = sizes.width
+    let browserHeight = sizes.height
+
     if (process.env.NODE_ENV === "development") {
         await installExtensions()
+        browserWidth = 1024
+        browserHeight = 728
     }
 
     mainWindow = new BrowserWindow({
+        title: 'tid',
         show: false,
-        width: 1024,
-        height: 728
+        width: browserWidth,
+        height: browserHeight,
+        backgroundColor: '#262831',
+        darkTheme: true,
+        fullscreenable: false,
     })
 
     mainWindow.loadURL(`file://${__dirname}/app.html`)

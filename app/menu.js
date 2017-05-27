@@ -1,10 +1,14 @@
 import { app, Menu, shell, BrowserWindow } from "electron"
+import getWindowSize from "./utils/windowSize"
 
 export default class MenuBuilder {
     mainWindow: BrowserWindow;
 
     constructor(mainWindow: BrowserWindow) {
         this.mainWindow = mainWindow
+        this.dispatch = (action) => {
+            this.mainWindow.webContents.send("redux", action)
+        }
     }
 
     buildMenu() {
@@ -44,17 +48,17 @@ export default class MenuBuilder {
 
     buildDarwinTemplate() {
         const subMenuAbout = {
-            label: "Electron",
+            label: "tid - Tracker",
             submenu: [
                 {
-                    label: "About ElectronReact",
+                    label: "About tid",
                     selector: "orderFrontStandardAboutPanel:"
                 },
                 { type: "separator" },
                 { label: "Services", submenu: [] },
                 { type: "separator" },
                 {
-                    label: "Hide ElectronReact",
+                    label: "Hide tid",
                     accelerator: "Command+H",
                     selector: "hide:"
                 },
@@ -98,48 +102,58 @@ export default class MenuBuilder {
                 }
             ]
         }
-        const subMenuViewDev = {
+
+        const subMenuView = {
             label: "View",
             submenu: [
                 {
-                    label: "Reload",
-                    accelerator: "Command+R",
+                    label: "Standard View",
+                    accelerator: "Ctrl+Command+j",
                     click: () => {
-                        this.mainWindow.webContents.reload()
+                        let bounds = this.mainWindow.getBounds()
+                        this.mainWindow.setBounds({
+                            ...bounds,
+                            ...getWindowSize(process, "default")
+                        })
+                        this.dispatch({
+                            type: 'SET_WINDOW_VIEW',
+                            view: 'default'
+                        })
                     }
                 },
                 {
-                    label: "Toggle Full Screen",
-                    accelerator: "Ctrl+Command+F",
+                    label: "Extended View",
+                    accelerator: "Ctrl+Command+k",
                     click: () => {
-                        this.mainWindow.setFullScreen(
-                            !this.mainWindow.isFullScreen()
-                        )
+                        let bounds = this.mainWindow.getBounds()
+                        this.mainWindow.setBounds({
+                            ...bounds,
+                            ...getWindowSize(process, "extended")
+                        })
+                        this.dispatch({
+                            type: 'SET_WINDOW_VIEW',
+                            view: 'extended'
+                        })
                     }
                 },
                 {
-                    label: "Toggle Developer Tools",
-                    accelerator: "Alt+Command+I",
+                    label: "Statistics View",
+                    accelerator: "Ctrl+Command+l",
                     click: () => {
-                        this.mainWindow.toggleDevTools()
+                        let bounds = this.mainWindow.getBounds()
+                        this.mainWindow.setBounds({
+                            ...bounds,
+                            ...getWindowSize(process, "stats")
+                        })
+                        this.dispatch({
+                            type: 'SET_WINDOW_VIEW',
+                            view: 'stats'
+                        })
                     }
-                }
+                },
             ]
         }
-        const subMenuViewProd = {
-            label: "View",
-            submenu: [
-                {
-                    label: "Toggle Full Screen",
-                    accelerator: "Ctrl+Command+F",
-                    click: () => {
-                        this.mainWindow.setFullScreen(
-                            !this.mainWindow.isFullScreen()
-                        )
-                    }
-                }
-            ]
-        }
+
         const subMenuWindow = {
             label: "Window",
             submenu: [
@@ -192,10 +206,6 @@ export default class MenuBuilder {
                 }
             ]
         }
-
-        const subMenuView = process.env.NODE_ENV === "development"
-            ? subMenuViewDev
-            : subMenuViewProd
 
         return [
             subMenuAbout,

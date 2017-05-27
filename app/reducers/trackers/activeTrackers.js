@@ -8,6 +8,7 @@ import {
     CANCEL_SAVING,
     SET_TRACKER_DESCRIPTION,
     SET_TRACKER_PROJECT,
+    SET_SAVED_TRACKER_PROJECT,
     SET_TRACKER_CLIENT
 } from "../../actions/activeTrackers"
 import {
@@ -31,7 +32,8 @@ function newTracker() {
         firstLog: null, // set on stop
         lastLog: null, // set on stop
         project: null, // set on stop
-        client: null // set on stop
+        projectSaved: null, // set for stepping MultiTracker SaveState
+        client: null, // set on stop
     }
 }
 
@@ -127,7 +129,8 @@ export default function activeTrackers(state = initialState, action) {
                 return {
                     ...t,
                     logs: [...t.logs, newLog()],
-                    totalMinutes: null
+                    totalMinutes: null,
+                    projectSaved: null,
                 }
             } else return t
         })
@@ -146,6 +149,15 @@ export default function activeTrackers(state = initialState, action) {
                 return {
                     ...t,
                     project: action.payload.value
+                }
+            } else return t
+        })
+    case SET_SAVED_TRACKER_PROJECT:
+        return state.map(t => {
+            if (action.tracker === t.id) {
+                return {
+                    ...t,
+                    projectSaved: action.payload.value
                 }
             } else return t
         })

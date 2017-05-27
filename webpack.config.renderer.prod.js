@@ -9,6 +9,7 @@ import merge from "webpack-merge"
 import HtmlWebpackPlugin from "html-webpack-plugin"
 import BabiliPlugin from "babili-webpack-plugin"
 import baseConfig from "./webpack.config.base"
+import LessVariables from "./app/global.variables.js"
 
 export default merge.smart(baseConfig, {
     devtool: "source-map",
@@ -24,61 +25,40 @@ export default merge.smart(baseConfig, {
 
     module: {
         rules: [
-            // Extract all .global.css to style.css as is
             {
-                test: /\.global\.css$/,
-                use: ExtractTextPlugin.extract({
-                    use: "css-loader",
-                    fallback: "style-loader"
-                })
-            },
-            // Pipe other styles through css modules and append to style.css
-            {
-                test: /^((?!\.global).)*\.css$/,
-                use: ExtractTextPlugin.extract({
-                    use: {
+                test: /\.css$/,
+                use: [
+                    {
+                        loader: "style-loader"
+                    },
+                    {
                         loader: "css-loader",
                         options: {
-                            modules: true,
-                            importLoaders: 1,
-                            localIdentName: "[name]__[local]__[hash:base64:5]"
+                            sourceMap: true
                         }
                     }
-                })
+                ]
             },
-            // Add SASS support  - compile all .global.scss files and pipe it to style.css
             {
-                test: /\.global\.scss$/,
-                use: ExtractTextPlugin.extract({
-                    use: [
-                        {
-                            loader: "css-loader"
-                        },
-                        {
-                            loader: "sass-loader"
+                test: /\.less$/,
+                use: [
+                    {
+                        loader: "style-loader"
+                    },
+                    {
+                        loader: "css-loader",
+                        options: {
+                            sourceMap: true
                         }
-                    ],
-                    fallback: "style-loader"
-                })
-            },
-            // Add SASS support  - compile all other .scss files and pipe it to style.css
-            {
-                test: /^((?!\.global).)*\.scss$/,
-                use: ExtractTextPlugin.extract({
-                    use: [
-                        {
-                            loader: "css-loader",
-                            options: {
-                                modules: true,
-                                importLoaders: 1,
-                                localIdentName: "[name]__[local]__[hash:base64:5]"
-                            }
-                        },
-                        {
-                            loader: "sass-loader"
+                    },
+                    {
+                        loader: "less-loader",
+                        options: {
+                            sourceMap: true,
+                            modifyVars: LessVariables
                         }
-                    ]
-                })
+                    }
+                ]
             },
             // WOFF Font
             {

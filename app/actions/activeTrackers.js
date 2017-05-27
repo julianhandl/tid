@@ -8,6 +8,7 @@ export const CANCEL_SAVING = "CANCEL_SAVING"
 
 export const SET_TRACKER_DESCRIPTION = "SET_TRACKER_DESCRIPTION"
 export const SET_TRACKER_PROJECT = "SET_TRACKER_PROJECT"
+export const SET_SAVED_TRACKER_PROJECT = "SET_SAVED_TRACKER_PROJECT"
 export const SET_TRACKER_CLIENT = "SET_TRACKER_CLIENT"
 
 export function addTracker(){
@@ -77,6 +78,16 @@ export function setTrackerProject(id, val){
         tracker: id,
         payload: {
             value: val
+        }
+    }
+}
+
+export function setSavedTrackerProject(id, value){
+    return {
+        type: SET_SAVED_TRACKER_PROJECT,
+        tracker: id,
+        payload: {
+            value: value === undefined ? true : value
         }
     }
 }

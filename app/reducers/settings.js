@@ -3,7 +3,8 @@ import {
 } from "../actions/settings"
 
 const initialState = {
-    language: "en"
+    language: "en",
+    windowView: "standard"
 }
 
 export default function settings(state = initialState, action){
@@ -12,6 +13,11 @@ export default function settings(state = initialState, action){
         return {
             ...state,
             language: action.payload.langKey
+        }
+    case "SET_WINDOW_VIEW":
+        return {
+            ...state,
+            windowView: action.view
         }
     default:
         return state

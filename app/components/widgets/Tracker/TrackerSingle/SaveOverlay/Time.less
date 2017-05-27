@@ -1,0 +1,33 @@
+@import (reference) "../../../../../global.less";
+
+.tracker-save-time-control{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.tracker-delete{
+    color: @color-danger;
+}
+.tracker-save{
+    color: @color-success;
+}
+.tracker-save-time-input{
+    display: flex;
+    justify-content: center;
+    input{
+        display: inline-block;
+        background: transparent;
+        color: @color-text;
+        border: 0;
+        border-bottom: 1px solid @color-action;
+        font-family: @font-family;
+        padding: 0;
+        outline: none;
+        &:first-child{
+            text-align: right;
+        }
+        &:last-child{
+            text-align: left;
+        }
+    }
+}

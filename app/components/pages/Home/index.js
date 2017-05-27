@@ -8,13 +8,14 @@ import "./Home.less"
 
 import {tick} from "../../../actions/ticker"
 
-@connect(({trackers, ticker})=>({
+@connect(({trackers, ticker, settings})=>({
     activeTrackers: trackers.activeTrackers,
     runningTrackersLength: trackers.activeTrackers.filter(t=>{
         let lastLog = t.logs[t.logs.length-1]
         return lastLog.start && lastLog.end === null
     }).length,
-    ticker: ticker
+    ticker: ticker,
+    windowView: settings.windowView
 }),{
     tick
 })
@@ -51,7 +52,7 @@ export default class Home extends Component {
     componentWillUnmount(){
         this.stopTicker()
     }
-    render(){
+    renderTracker = () => {
         let trackers = this.props.activeTrackers
         if(trackers.length > 1){
             return <div className="tracker-multi-wrapper">
@@ -69,5 +70,14 @@ export default class Home extends Component {
         else{
             return <div><Translation translation="no_tracker" /></div>
         }
+    }
+    render(){
+        let view = this.props.windowView
+        let classes = `tid-homepage tid-homepage-view-${view}`
+        return (
+            <div className={classes}>
+                {this.renderTracker()}
+            </div>
+        )
     }
 }

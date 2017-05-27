@@ -2,6 +2,7 @@ import React from "react"
 import { connect } from "react-redux"
 import Close from "../../../Icons/Close"
 import {Translation} from "../../../../../i18n/Intl"
+import "./Time.less"
 import {
     startSaving,
     cancelSaving,
@@ -31,22 +32,15 @@ export default class Time extends React.Component {
     }
     render() {
         return (
-            <div className="tracker-single-save-time">
-                <div className="tracker-single-header">
-                    <Close
-                        onClick={() => {
-                            this.props.cancelSaving(this.props.trackerId)
-                        }}
-                    />
-                    <span />
-                </div>
-                <div className="tracker-single-save-time-control">
-                    <div className="tracker-single-delete"
+            <div className="tracker-save-time">
+                { this.props.headerComponent || null }
+                <div className="tracker-save-time-control">
+                    <div className="tracker-delete"
                         onClick={()=>{
                             this.props.deleteTracker(this.props.trackerId)
                         }}
                     ><Translation translation="trash" /></div>
-                    <div className="tracker-single-save-time-input">
+                    <div className="tracker-save-time-input">
                         <input
                             ref={ref => (this.hourInput = ref)}
                             type="text"
@@ -57,7 +51,7 @@ export default class Time extends React.Component {
                             type="text"
                         />
                     </div>
-                    <div className="tracker-single-save"
+                    <div className="tracker-save"
                         onClick={this.save}
                     ><Translation translation="save" /></div>
                 </div>

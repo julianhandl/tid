@@ -1,3 +1,4 @@
+import {ipcRenderer} from "electron"
 import React from "react"
 import { render } from "react-dom"
 import { hashHistory } from "react-router"
@@ -7,8 +8,12 @@ import Root from "./containers/Root"
 import configureStore from "./store/configureStore"
 import "./global.less"
 
-const store = configureStore()
+export const store = configureStore()
 const history = syncHistoryWithStore(hashHistory, store)
+
+ipcRenderer.on("redux", (event, action)=>{
+    store.dispatch(action)
+})
 
 render(
     <AppContainer>
