@@ -110,8 +110,8 @@ export default class MenuBuilder {
                     label: "Standard View",
                     accelerator: "Ctrl+Command+j",
                     click: () => {
-                        let bounds = this.mainWindow.getBounds()
-                        this.mainWindow.setBounds({
+                        let bounds = this.mainWindow.getContentBounds()
+                        this.mainWindow.setContentBounds({
                             ...bounds,
                             ...getWindowSize(process, this.mainWindow, "default")
                         })
@@ -125,8 +125,8 @@ export default class MenuBuilder {
                     label: "Extended View",
                     accelerator: "Ctrl+Command+k",
                     click: () => {
-                        let bounds = this.mainWindow.getBounds()
-                        this.mainWindow.setBounds({
+                        let bounds = this.mainWindow.getContentBounds()
+                        this.mainWindow.setContentBounds({
                             ...bounds,
                             ...getWindowSize(process, this.mainWindow, "extended")
                         })
@@ -140,8 +140,8 @@ export default class MenuBuilder {
                     label: "Statistics View",
                     accelerator: "Ctrl+Command+l",
                     click: () => {
-                        let bounds = this.mainWindow.getBounds()
-                        this.mainWindow.setBounds({
+                        let bounds = this.mainWindow.getContentBounds()
+                        this.mainWindow.setContentBounds({
                             ...bounds,
                             ...getWindowSize(process, this.mainWindow, "stats")
                         })

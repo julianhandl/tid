@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from "electron"
+import { app, BrowserWindow, globalShortcut } from "electron"
 import getWindowSize from "./utils/windowSize"
 import MenuBuilder from "./menu"
 
@@ -55,6 +55,7 @@ app.on("ready", async () => {
         autoHideMenuBar: true,
         width: browserWidth,
         height: browserHeight,
+        useContentSize: true,
         backgroundColor: '#262831',
         darkTheme: true,
         fullscreenable: false,
@@ -70,6 +71,15 @@ app.on("ready", async () => {
         }
         mainWindow.show()
         mainWindow.focus()
+    })
+
+    globalShortcut.register('Alt', () => {
+        let menuBarVisible = mainWindow.isMenuBarVisible()
+        let bounds = this.mainWindow.getContentBounds()
+        mainWindow.setContentBounds({
+            ...bounds,
+            ...getWindowSize(process, this.mainWindow, "default", menuBarVisible)
+        })
     })
 
     mainWindow.on("closed", () => {
