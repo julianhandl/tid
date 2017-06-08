@@ -8,11 +8,17 @@ import {
     cancelSaving,
     deleteTracker
 } from "../../../../../actions/activeTrackers"
+import {
+    saveActiveTracker
+} from "../../../../../actions/closedTrackers"
 
-@connect(() => ({}), {
+@connect(({trackers:{activeTrackers}},props) => ({
+    tracker: activeTrackers.find(t => t.id === props.trackerId)
+}), {
     startSaving,
     cancelSaving,
-    deleteTracker
+    deleteTracker,
+    saveActiveTracker
 })
 export default class Time extends React.Component {
     shouldComponentUpdate() {
@@ -28,7 +34,15 @@ export default class Time extends React.Component {
         let hours = parseInt(this.hourInput.value, 10)
         let minutes = parseInt(this.minInput.value, 10)
         let totalMinutes = (hours*60) + minutes
-        this.props.startSaving(this.props.trackerId, totalMinutes)
+        if(this.props.projectTracker){
+            this.props.saveActiveTracker({
+                ...this.props.tracker,
+                totalMinutes: totalMinutes
+            })
+        }
+        else{
+            this.props.startSaving(this.props.trackerId, totalMinutes)
+        }
     }
     render() {
         return (

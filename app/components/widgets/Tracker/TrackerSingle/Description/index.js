@@ -15,7 +15,8 @@ import "./Description.less"
 })
 export default class Description extends React.Component{
     shouldComponentUpdate(nextProps){
-        return this.props.description !== nextProps.description
+        return this.props.description !== nextProps.description ||
+            this.props.lang !== nextProps.lang
     }
     render(){
         return (

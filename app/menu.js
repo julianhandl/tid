@@ -1,5 +1,8 @@
-import { app, Menu, shell, BrowserWindow } from "electron"
+import { app, Menu, shell, BrowserWindow, dialog } from "electron"
+const fs = require("fs")
 import getWindowSize from "./utils/windowSize"
+import {translate} from "./i18n/Intl.js"
+import openProject from "./utils/menu/openProject"
 
 export default class MenuBuilder {
     mainWindow: BrowserWindow;
@@ -9,19 +12,155 @@ export default class MenuBuilder {
         this.dispatch = (action) => {
             this.mainWindow.webContents.send("redux", action)
         }
+
     }
 
-    buildMenu() {
+    buildMenu(settings, settingsstore) {
+        const getLabel = (value) => {
+            return translate(value, settings.language)
+        }
+
         if (process.env.NODE_ENV === "development") {
             this.setupDevelopmentEnvironment()
         }
 
+        const darwin = process.platform === "darwin"
+
+        const subMenuFile = {
+            label: getLabel("menu_file"),
+            submenu: [
+                {
+                    label: getLabel("menu_file_open"),
+                    accelerator: darwin ? "Command+o" : "Ctrl+o",
+                    click: ()=>{
+                        dialog.showOpenDialog({
+                            title: "Test Title",
+                            properties: [
+                                'openDirectory',
+                            ],
+                            message: getLabel("menu_file_open_message"),
+                        },(path) => {
+                            if(path && path.length === 1){
+                                openProject(path[0], settings, settingsstore)
+                            }
+                        })
+                    }
+                },{
+                    label: getLabel("menu_file_open_recent"),
+                    submenu: settings.recentProjects.map(r => ({
+                        label: r,
+                        click: ()=>{
+                            openProject(r, settings, settingsstore)
+                        }
+                    }))
+                },
+                { type: "separator" },
+                {
+                    label: getLabel("menu_file_save"),
+                    accelerator: darwin ? "Command+s" : "Ctrl+s",
+                },
+                { type: "separator" },
+                {
+                    label: getLabel("menu_file_close"),
+                    accelerator: darwin ? "Command+Q" : "Ctrl+Q",
+                    click: () => {
+                        this.mainWindow.close()
+                    }
+                }
+            ]
+        }
+        const subMenuView = {
+            label: getLabel("menu_view"),
+            submenu: [
+                {
+                    label: getLabel("menu_view_standard"),
+                    accelerator: darwin ? "Ctrl+Command+j" : "Ctrl+j",
+                    click: () => {
+                        let bounds = this.mainWindow.getBounds()
+                        this.mainWindow.setBounds({
+                            ...bounds,
+                            ...getWindowSize(process, this.mainWindow, "default")
+                        })
+                        this.dispatch({
+                            type: 'SET_WINDOW_VIEW',
+                            view: 'default'
+                        })
+                    }
+                },
+                {
+                    label: getLabel("menu_view_extended"),
+                    accelerator: darwin ? "Ctrl+Command+k" : "Ctrl+k",
+                    click: () => {
+                        let bounds = this.mainWindow.getBounds()
+                        this.mainWindow.setBounds({
+                            ...bounds,
+                            ...getWindowSize(process, this.mainWindow, "extended")
+                        })
+                        this.dispatch({
+                            type: 'SET_WINDOW_VIEW',
+                            view: 'extended'
+                        })
+                    }
+                },
+                {
+                    label: getLabel("menu_view_stats"),
+                    accelerator: darwin ? "Ctrl+Command+l" : "Ctrl+l",
+                    click: () => {
+                        let bounds = this.mainWindow.getBounds()
+                        this.mainWindow.setBounds({
+                            ...bounds,
+                            ...getWindowSize(process, this.mainWindow, "stats")
+                        })
+                        this.dispatch({
+                            type: 'SET_WINDOW_VIEW',
+                            view: 'stats'
+                        })
+                    }
+                },
+            ]
+        }
+        const subMenuSettings = {
+            label: getLabel("menu_settings"),
+            submenu: [{
+                label: getLabel("menu_settings_language"),
+                submenu: [{
+                    label: getLabel("menu_settings_language_en"),
+                    type: 'radio',
+                    checked: settings.language === "en",
+                    click: ()=>{
+                        this.dispatch({
+                            type: "SETTINGS_CHANGE_LANGUAGE",
+                            payload: { langKey: "en" }
+                        })
+                    }
+                },{
+                    label: getLabel("menu_settings_language_de"),
+                    type: 'radio',
+                    checked: settings.language === "de",
+                    click: ()=>{
+                        this.dispatch({
+                            type: "SETTINGS_CHANGE_LANGUAGE",
+                            payload: { langKey: "de" }
+                        })
+                    }
+                }]
+            }]
+        }
+
         let template
 
-        if (process.platform === "darwin") {
-            template = this.buildDarwinTemplate()
+        if (darwin) {
+            template = this.buildDarwinTemplate(
+                subMenuFile,
+                subMenuView,
+                subMenuSettings
+            )
         } else {
-            template = this.buildDefaultTemplate()
+            template = this.buildDefaultTemplate(
+                subMenuFile,
+                subMenuView,
+                subMenuSettings
+            )
         }
 
         const menu = Menu.buildFromTemplate(template)
@@ -46,7 +185,7 @@ export default class MenuBuilder {
         })
     }
 
-    buildDarwinTemplate() {
+    buildDarwinTemplate(subMenuFile, subMenuView, subMenuSettings) {
         const subMenuAbout = {
             label: "tid - Tracker",
             submenu: [
@@ -209,81 +348,20 @@ export default class MenuBuilder {
 
         return [
             subMenuAbout,
+            subMenuFile,
             subMenuEdit,
             subMenuView,
-            subMenuWindow,
+            subMenuSettings,
+            // subMenuWindow,
             subMenuHelp
         ]
     }
 
-    buildDefaultTemplate() {
+    buildDefaultTemplate(subMenuFile, subMenuView, subMenuSettings) {
         const templateDefault = [
-            {
-                label: "&File",
-                submenu: [
-                    {
-                        label: "&Open",
-                        accelerator: "Ctrl+O"
-                    },
-                    {
-                        label: "&Close",
-                        accelerator: "Ctrl+W",
-                        click: () => {
-                            this.mainWindow.close()
-                        }
-                    }
-                ]
-            },
-            {
-                label: "View",
-                submenu: [
-                    {
-                        label: "Standard View",
-                        accelerator: "Ctrl+j",
-                        click: () => {
-                            let bounds = this.mainWindow.getBounds()
-                            this.mainWindow.setBounds({
-                                ...bounds,
-                                ...getWindowSize(process, this.mainWindow, "default")
-                            })
-                            this.dispatch({
-                                type: 'SET_WINDOW_VIEW',
-                                view: 'default'
-                            })
-                        }
-                    },
-                    {
-                        label: "Extended View",
-                        accelerator: "Ctrl+k",
-                        click: () => {
-                            let bounds = this.mainWindow.getBounds()
-                            this.mainWindow.setBounds({
-                                ...bounds,
-                                ...getWindowSize(process, this.mainWindow, "extended")
-                            })
-                            this.dispatch({
-                                type: 'SET_WINDOW_VIEW',
-                                view: 'extended'
-                            })
-                        }
-                    },
-                    {
-                        label: "Statistics View",
-                        accelerator: "Ctrl+l",
-                        click: () => {
-                            let bounds = this.mainWindow.getBounds()
-                            this.mainWindow.setBounds({
-                                ...bounds,
-                                ...getWindowSize(process, this.mainWindow, "stats")
-                            })
-                            this.dispatch({
-                                type: 'SET_WINDOW_VIEW',
-                                view: 'stats'
-                            })
-                        }
-                    },
-                ]
-            },
+            subMenuFile,
+            subMenuView,
+            subMenuSettings,
             {
                 label: "Help",
                 submenu: [
