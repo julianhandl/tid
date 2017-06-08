@@ -60,7 +60,10 @@ export default class Home extends Component {
                 <MultiHeader />
                 <div className="tracker-multi-container">
                     {this.props.activeTrackers.map(t => {
-                        return <TrackerMulti trackerId={t.id} />
+                        return <TrackerMulti
+                            key={`tracker-${t.id}`}
+                            trackerId={t.id}
+                        />
                     })}
                 </div>
             </div>

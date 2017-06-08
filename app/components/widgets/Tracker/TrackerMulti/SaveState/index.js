@@ -21,7 +21,8 @@ import "./SaveState.less"
         },0),
         projects: projects,
         clients: clients,
-        lang: settings.language
+        lang: settings.language,
+        trackerType: settings.trackerType,
     }
 },{
 })
@@ -32,7 +33,7 @@ export default class SaveState extends React.Component{
             this.props.minutes !== nextProps.minutes
     }
     render(){
-        if(this.props.saving){
+        if(this.props.saving && this.props.trackerType !== "project"){
             // Save Project and Client
             let projects = [
                 translate("new_project",this.props.lang),
@@ -68,6 +69,7 @@ export default class SaveState extends React.Component{
                 <Time
                     trackerId={this.props.trackerId}
                     minutes={this.props.minutes}
+                    projectTracker={this.props.trackerType === "project"}
                 />
             )
         }

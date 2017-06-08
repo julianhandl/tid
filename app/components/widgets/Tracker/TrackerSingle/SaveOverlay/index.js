@@ -6,13 +6,14 @@ import Close from "../../../Icons/Close"
 import {cancelSaving} from "../../../../../actions/activeTrackers"
 import "./SaveOverlay.less"
 
-@connect(({trackers:{activeTrackers}},props)=>{
+@connect(({trackers:{activeTrackers},settings},props)=>{
     let tracker = activeTrackers.find(t => t.id === props.trackerId)
     return {
         saving: !!tracker.totalMinutes,
         minutes: tracker.logs.reduce((min, log)=>{
             return min + (log.total / 1000 / 60)
-        },0)
+        },0),
+        trackerType: settings.trackerType,
     }
 },{
     cancelSaving
@@ -39,7 +40,7 @@ export default class SaveOverlay extends React.Component{
         return (
             <div>
                 {
-                    this.props.saving ?
+                    this.props.saving && this.props.trackerType !== "project" ?
                     <Project
                         trackerId={this.props.trackerId}
                     /> :
@@ -47,6 +48,7 @@ export default class SaveOverlay extends React.Component{
                         trackerId={this.props.trackerId}
                         minutes={this.props.minutes}
                         headerComponent={this.renderTimeSaveHeader()}
+                        projectTracker={this.props.trackerType === "project"}
                     />
                 }
             </div>

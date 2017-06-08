@@ -1,6 +1,7 @@
-import { app, BrowserWindow } from "electron"
+import { app, BrowserWindow, ipcMain } from "electron"
 import getWindowSize from "./utils/windowSize"
 import MenuBuilder from "./menu"
+import SettingsStore from "./utils/SettingsStore"
 
 let mainWindow = null
 
@@ -37,45 +38,64 @@ app.on("window-all-closed", () => {
 })
 
 app.on("ready", async () => {
-    // remember this from last session
-    let sizes = getWindowSize(process, undefined, "default")
-
-    let browserWidth = sizes.width
-    let browserHeight = sizes.height
-
     if (process.env.NODE_ENV === "development") {
         await installExtensions()
-        browserWidth = 1024
-        browserHeight = 728
     }
 
-    mainWindow = new BrowserWindow({
-        title: 'tid',
-        show: false,
-        autoHideMenuBar: true,
-        width: browserWidth,
-        height: browserHeight,
-        backgroundColor: '#262831',
-        darkTheme: true,
-        fullscreenable: false,
-    })
+    let settingsstore = new SettingsStore((settings, store)=>{
+        let sizes = getWindowSize(process, undefined, settings.windowView)
 
-    mainWindow.loadURL(`file://${__dirname}/app.html`)
+        let browserWidth = sizes.width
+        let browserHeight = sizes.height
 
-    // @TODO: Use 'ready-to-show' event
-    //        https://github.com/electron/electron/blob/master/docs/api/browser-window.md#using-ready-to-show-event
-    mainWindow.webContents.on("did-finish-load", () => {
-        if (!mainWindow) {
-            throw new Error('"mainWindow" is not defined')
+        if (process.env.NODE_ENV === "development") {
+            browserWidth = 1024
+            browserHeight = 728
         }
-        mainWindow.show()
-        mainWindow.focus()
-    })
 
-    mainWindow.on("closed", () => {
-        mainWindow = null
-    })
+        mainWindow = new BrowserWindow({
+            title: 'tid',
+            show: false,
+            autoHideMenuBar: true,
+            width: browserWidth,
+            height: browserHeight,
+            backgroundColor: '#262831',
+            darkTheme: true,
+            fullscreenable: false,
+        })
 
-    const menuBuilder = new MenuBuilder(mainWindow)
-    menuBuilder.buildMenu()
+        mainWindow.loadURL(`file://${__dirname}/app.html`)
+
+        // @TODO: Use 'ready-to-show' event
+        //        https://github.com/electron/electron/blob/master/docs/api/browser-window.md#using-ready-to-show-event
+        mainWindow.webContents.on("did-finish-load", () => {
+            if (!mainWindow) {
+                throw new Error('"mainWindow" is not defined')
+            }
+            mainWindow.show()
+            mainWindow.focus()
+
+            mainWindow.webContents.send("redux", {
+                type: 'INIT_SETTINGS',
+                payload: {
+                    settings: settings
+                }
+            })
+
+            ipcMain.on("save_settings_prop",(sender, action) => {
+                settingsstore.set(action)
+            })
+        })
+
+        mainWindow.on("closed", () => {
+            mainWindow = null
+        })
+
+        const menuBuilder = new MenuBuilder(mainWindow)
+        menuBuilder.buildMenu(settings, store)
+
+        store.onChange((newSettings)=>{
+            menuBuilder.buildMenu(newSettings, store)
+        })
+    })
 })
