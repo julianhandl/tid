@@ -242,6 +242,7 @@ export default class MenuBuilder {
             ]
         }
 
+        /*
         const subMenuView = {
             label: "View",
             submenu: [
@@ -292,6 +293,7 @@ export default class MenuBuilder {
                 },
             ]
         }
+        */
 
         const subMenuWindow = {
             label: "Window",

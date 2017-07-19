@@ -1,8 +1,18 @@
 import {app} from 'electron'
 const fs = require('fs')
 
+let initLanguage = 'en'
+let locale = app.getLocale()
+if(locale){
+    if(locale.indexOf('-') >= 0){
+        intialLanguage = locale.split('-')[0]
+    }
+    else{
+        intialLanguage = locale
+    }
+}
 const initalSettings = {
-    language: app.getLocale().split("-")[0],
+    language: initLanguage,
     windowView: "standard",
     trackerType: "project",
     lastOpenProject: undefined,
