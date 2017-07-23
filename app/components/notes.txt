@@ -1,7 +1,14 @@
 Next Steps
+- open project
+- create SaveTracker.js 
+- store tracker on start
+- store tracker on pause
+    trigger save tracker on every action after debounce
+- move tracker on save
+- store already created tracker on project open
+
 
 Storage
-- create a settings file with global settings and stuff like recent projects
 - create a folder in the project. This folder contains 3 files:
     - settings
     - activeTrackers

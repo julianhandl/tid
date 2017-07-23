@@ -18,9 +18,21 @@ export default function openProject(path, settings, store){
                     recentProjects = recentProjects.slice(0,4)
                 }
             }
+
+            // store already running trackers in the folder
+            let activeWebcontents = webContents.getFocusedWebContents()
+            if(activeWebcontents){
+                activeWebcontents.send("redux", {
+                    type: "SET_CURRENT_PROJECT",
+                    path
+                })
+                // load trackers in that project
+            }
+            let trackers = {}
+
             store.set([{
                 prop: "lastOpenProject",
-                value: path + "/tidtracker"
+                value: path
             },{
                 prop: "recentProjects",
                 value: recentProjects
@@ -45,14 +57,15 @@ export default function openProject(path, settings, store){
                 // store already running trackers in the folder
                 let activeWebcontents = webContents.getFocusedWebContents()
                 if(activeWebcontents){
-                    activeWebcontents.send()
+                    activeWebcontents.send("redux", {
+                        type: "SET_CURRENT_PROJECT",
+                        path
+                    })
                 }
-                let trackers = {}
-
 
                 store.set([{
                     prop: "lastOpenProject",
-                    value: path + "/tidtracker"
+                    value: path
                 },{
                     prop: "recentProjects",
                     value: recentProjects

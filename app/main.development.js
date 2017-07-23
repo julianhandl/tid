@@ -48,10 +48,13 @@ app.on("ready", async () => {
         let browserWidth = sizes.width
         let browserHeight = sizes.height
 
+        /*
         if (process.env.NODE_ENV === "development") {
-            browserWidth = 1024
-            browserHeight = 728
+            sizes = getWindowSize(process, undefined, "stats")
+            //browserWidth = 1024
+            //browserHeight = 728
         }
+        */
 
         mainWindow = new BrowserWindow({
             title: 'tid',
@@ -84,6 +87,15 @@ app.on("ready", async () => {
 
             ipcMain.on("save_settings_prop",(sender, action) => {
                 settingsstore.set(action)
+            })
+        })
+
+        // on content resize / titlebar appear
+        ipcMain.on("webContentResize", ()=>{
+            let bounds = mainWindow.getBounds()
+            mainWindow.setBounds({
+                ...bounds,
+                ...getWindowSize(process, mainWindow, store.get().windowView)
             })
         })
 

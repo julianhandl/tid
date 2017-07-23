@@ -7,7 +7,8 @@ import {
 const initialState = {
     language: "en",
     windowView: "standard",
-    trackerType: "project"
+    trackerType: "project",
+    currentProject: undefined
 }
 
 export default function settings(state = initialState, action){
@@ -36,6 +37,11 @@ export default function settings(state = initialState, action){
         return {
             ...state,
             windowView: action.view
+        }
+    case "SET_CURRENT_PROJECT":
+        return {
+            ...state,
+            currentProject: action.path
         }
     default:
         return state

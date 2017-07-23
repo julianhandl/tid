@@ -15,6 +15,10 @@ ipcRenderer.on("redux", (event, action)=>{
     store.dispatch(action)
 })
 
+window.addEventListener("resize", () => {
+    ipcRenderer.send("webContentResize", true)
+})
+
 render(
     <AppContainer>
         <Root store={store} history={history} />

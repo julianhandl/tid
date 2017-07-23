@@ -15,6 +15,16 @@ import {
     SAVE_ACTIVE_TRACKER
 } from "../../actions/closedTrackers"
 
+function createHash() {
+  var text = "";
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+  for (var i = 0; i < 5; i++)
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+  return text;
+}
+
 function newLog() {
     return {
         start: null,
@@ -25,7 +35,7 @@ function newLog() {
 
 function newTracker() {
     return {
-        id: Date.now(), // user + datestring
+        id: Date.now() + '-' + createHash(), // user + datestring
         logs: [newLog()], // if no open logs and totalMinutes => set project
         description: null,
         totalMinutes: null, // set on stop
