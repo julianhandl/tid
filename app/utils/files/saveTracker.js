@@ -1,3 +1,5 @@
+const fs  = require("fs")
+
 export default function saveTracker(trackers, status, projectPath, clearExisting){
     if(Array.isArray(trackers)){
         trackers.forEach(t => {
@@ -9,15 +11,24 @@ export default function saveTracker(trackers, status, projectPath, clearExisting
         let destination = status === 'active' ? 'active' : 'closed'
         
         // create destination folder if missing
-        fs.stat(projectPath+"/tidtracker/"+destination,(err, stat)=>{
-            if(!stat){
-                fs.mkdir(projectPath+"/tidtracker/"+destination,(err)=>{
-                    if(err){
-                        return err
-                    }
-                })
+        let tidFolder = false
+        try{
+            fs.statSync(projectPath+"/tidtracker")
+            tidFolder = true
+        }
+        catch(err){
+            fs.mkdirSync(projectPath+"/tidtracker")
+            fs.mkdirSync(projectPath+"/tidtracker/"+destination)
+        }
+        if(tidFolder){
+            let destFolder
+            try{
+                destFolder = fs.statSync(projectPath+"/tidtracker/"+destination)
             }
-        })
+            catch(err){
+                fs.mkdirSync(projectPath+"/tidtracker/"+destination)
+            }
+        }
 
         let filesToClear = []
         if(clearExisting){
@@ -33,28 +44,27 @@ export default function saveTracker(trackers, status, projectPath, clearExisting
             if(stat){
                 // create backup file if tracker already exists
                 fs.renameSync(trackerPath, trackerPath+"backup")
-                backup = trackerPath+"backup"
+                backupFile = trackerPath+"backup"
             }
             // finally save the tracker
             fs.writeFile(trackerPath,JSON.stringify(trackers),(err)=>{
                 if(err){
                     // throw error
                     // restore backup
-                    if(backup) fs.renameSync(backup, backup.substr(0, backup.length - 6))
+                    console.error(err)
+                    if(backupFile) fs.renameSync(backupFile, backupFile.substr(0, backupFile.length - 6))
                 }
                 else{
                     // clear already existing files
                     if(filesToClear.length > 0){
                         filesToClear.forEach(file => fs.unlinkSync(file))
                     }
-                    if(backup){
+                    if(backupFile){
                         // delete backup
-                        fs.unlinkSync(backup)
+                        fs.unlinkSync(backupFile)
                     }
                 }
             })
- 
         })
-       }
     }
 }

@@ -47,16 +47,18 @@ function newTracker() {
     }
 }
 
-const initialState = [newTracker()] // TODO: Set loaded data or empty tracker
+const initialState = [newTracker()]
 
 export default function activeTrackers(state = initialState, action) {
     switch (action.type) {
     case ADD_TRACKER:
-        return [...state, newTracker()]
+        let tracker = newTracker()
+        action.callback(tracker)
+        return [...state, tracker]
     case START_TRACKER:
         return state.map(t => {
             if (t.id === action.tracker) {
-                return {
+                let updatedTracker = {
                     ...t,
                     logs: t.logs.map((l, index, all) => {
                         if (index + 1 === all.length) {
@@ -67,12 +69,14 @@ export default function activeTrackers(state = initialState, action) {
                         } else return l
                     })
                 }
+                action.callback(updatedTracker)
+                return updatedTracker
             } else return t
         })
     case PAUSE_TRACKER:
         return state.map(t => {
             if (t.id === action.tracker) {
-                return {
+                let updatedTracker = {
                     ...t,
                     logs: [
                         ...t.logs.map((l, index, all) => {
@@ -88,6 +92,8 @@ export default function activeTrackers(state = initialState, action) {
                         newLog()
                     ]
                 }
+                action.callback(updatedTracker)
+                return updatedTracker
             } else return t
         })
     case STOP_TRACKER:
@@ -147,10 +153,12 @@ export default function activeTrackers(state = initialState, action) {
     case SET_TRACKER_DESCRIPTION:
         return  state.map(t => {
             if (action.tracker === t.id) {
-                return {
+                let updatedTracker = {
                     ...t,
                     description: action.payload.value
                 }
+                action.callback(updatedTracker)
+                return updatedTracker
             } else return t
         })
     case SET_TRACKER_PROJECT:

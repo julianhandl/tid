@@ -7,10 +7,11 @@ const initialState = []
 export default function closedTrackers(state = initialState, action) {
     switch(action.type){
     case SAVE_ACTIVE_TRACKER:
-        let newTracker = action.payload.tracker
+        let closedTracker = action.payload.tracker
+        action.callback(closedTracker)
         return [
             ...state,
-            newTracker
+            closedTracker
         ]
     default:
         return state

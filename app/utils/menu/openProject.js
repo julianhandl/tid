@@ -39,38 +39,36 @@ export default function openProject(path, settings, store){
             }])
         }
         else{
-            fs.mkdir(path+"/tidtracker",(err)=>{
-                let recentProjects = settings.recentProjects || []
-                if(
-                    recentProjects.length === 0 ||
-                    (
-                        recentProjects.length > 0 &&
-                        recentProjects[0] !== path
-                    )
-                ){
-                    recentProjects.unshift(path)
-                    if(recentProjects.length > 5){
-                        recentProjects = recentProjects.slice(0,5)
-                    }
+            let recentProjects = settings.recentProjects || []
+            if(
+                recentProjects.length === 0 ||
+                (
+                    recentProjects.length > 0 &&
+                    recentProjects[0] !== path
+                )
+            ){
+                recentProjects.unshift(path)
+                if(recentProjects.length > 5){
+                    recentProjects = recentProjects.slice(0,5)
                 }
+            }
 
-                // store already running trackers in the folder
-                let activeWebcontents = webContents.getFocusedWebContents()
-                if(activeWebcontents){
-                    activeWebcontents.send("redux", {
-                        type: "SET_CURRENT_PROJECT",
-                        path
-                    })
-                }
+            // store already running trackers in the folder
+            let activeWebcontents = webContents.getFocusedWebContents()
+            if(activeWebcontents){
+                activeWebcontents.send("redux", {
+                    type: "SET_CURRENT_PROJECT",
+                    path
+                })
+            }
 
-                store.set([{
-                    prop: "lastOpenProject",
-                    value: path
-                },{
-                    prop: "recentProjects",
-                    value: recentProjects
-                }])
-            })
+            store.set([{
+                prop: "lastOpenProject",
+                value: path
+            },{
+                prop: "recentProjects",
+                value: recentProjects
+            }])
         }
     })
 }

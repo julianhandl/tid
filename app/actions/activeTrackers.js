@@ -1,3 +1,5 @@
+import saveTracker from "../utils/files/saveTracker"
+
 export const ADD_TRACKER = "ADD_TRACKER"
 export const PAUSE_TRACKER = "PAUSE_TRACKER"
 export const START_TRACKER = "START_TRACKER"
@@ -12,29 +14,67 @@ export const SET_SAVED_TRACKER_PROJECT = "SET_SAVED_TRACKER_PROJECT"
 export const SET_TRACKER_CLIENT = "SET_TRACKER_CLIENT"
 
 export function addTracker(){
-    return {
-        type: ADD_TRACKER
+    return (dispatch, getState) => {
+        dispatch({
+            type: ADD_TRACKER,
+            callback: tracker => {
+                let state = getState()
+                let currentProject = state.settings.currentProject
+                if(currentProject){
+                    saveTracker(tracker, "active", state.settings.currentProject)
+                }
+            }
+        })
+        
     }
+    return 
 }
 
 export function pauseTracker(id){
-    return {
-        type: PAUSE_TRACKER,
-        tracker: id
+    return (dispatch, getState) => {
+        dispatch({
+            type: PAUSE_TRACKER,
+            tracker: id,
+            callback: tracker => {
+                let state = getState()
+                let currentProject = state.settings.currentProject
+                if(currentProject){
+                    saveTracker(tracker, "active", state.settings.currentProject)
+                }
+            }
+        })
     }
 }
 
 export function startTracker(id) {
-    return {
-        type: START_TRACKER,
-        tracker: id
+    return (dispatch, getState) => {
+        dispatch({
+            type: START_TRACKER,
+            tracker: id,
+            callback: tracker => {
+                let state = getState()
+                let currentProject = state.settings.currentProject
+                if(currentProject){
+                    saveTracker(tracker, "active", state.settings.currentProject)
+                }
+            }
+        })
     }
 }
 
 export function stopTracker(id) {
-    return {
-        type: STOP_TRACKER,
-        tracker: id
+    return (dispatch, getState) => {
+        dispatch({
+            type: STOP_TRACKER,
+            tracker: id,
+            callback: tracker => {
+                let state = getState()
+                let currentProject = state.settings.currentProject
+                if(currentProject){
+                    saveTracker(tracker, "active", state.settings.currentProject)
+                }
+            }
+        })
     }
 }
 
@@ -63,14 +103,25 @@ export function cancelSaving(id){
 }
 
 export function setTrackerDescription(id, val){
-    return {
-        type: SET_TRACKER_DESCRIPTION,
-        tracker: id,
-        payload: {
-            value: val
-        }
+    return (dispatch, getState) => {
+        dispatch({
+            type: SET_TRACKER_DESCRIPTION,
+            tracker: id,
+            payload: {
+                value: val
+            },
+            callback: tracker => {
+                let state = getState()
+                let currentProject = state.settings.currentProject
+                if(currentProject){
+                    saveTracker(tracker, "active", state.settings.currentProject)
+                }
+            }
+        })
     }
 }
+
+// Unused from here for now
 
 export function setTrackerProject(id, val){
     return {

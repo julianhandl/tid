@@ -16,7 +16,7 @@ const frameWidth = {
 
 export default function getScreenSize(pro, win, size){
     let menuVisible = win ? win.isMenuBarVisible() : false
-    let menuHeight = !menuVisible || getPlatform(pro) === 'mac' ? 0 : 25
+    let menuHeight = !menuVisible || getPlatform(pro) === 'mac' ? 0 : 20
     switch(size){
     case 'extended':
         return {

@@ -31,18 +31,22 @@ export default class SettingsStore{
             if(stat){
                 try {
                     fs.readFile(this.path, (err, data)=>{
-                        this.settings = JSON.parse(data)
+                        this.settings = initalSettings
+                        let settingsJSON = {}
+                        try{
+                            settingsJSON = JSON.parse(data)
+                        }
+                        catch(err){
+                            console.log(err)
+                        }
                         loadCallback({
                             ...initalSettings,
-                            ...this.settings
+                            ...settingsJSON
                         }, this)
                     })
                 } catch(error) {
                     this.settings = initalSettings
-                    loadCallback({
-                        ...initalSettings,
-                        ...this.settings
-                    }, this)
+                    loadCallback(this.settings, this)
                 }
             }
             else{
