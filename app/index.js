@@ -6,12 +6,22 @@ import { AppContainer } from "react-hot-loader"
 import { syncHistoryWithStore } from "react-router-redux"
 import Root from "./containers/Root"
 import configureStore from "./store/configureStore"
+import saveTracker from "./utils/files/saveTracker"
 import "./global.less"
 
 export const store = configureStore()
 const history = syncHistoryWithStore(hashHistory, store)
 
 ipcRenderer.on("redux", (event, action)=>{
+    switch(action.type){
+        case "SET_CURRENT_PROJECT":
+            // get active trackers and return an answer
+            let currentState = store.getState()
+            let activeTrackers = currentState.trackers && currentState.trackers.activeTrackers
+            if(activeTrackers.length > 0){
+                saveTracker(activeTrackers, "active", action.path)
+            }
+    }
     store.dispatch(action)
 })
 

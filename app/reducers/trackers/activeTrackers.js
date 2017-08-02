@@ -51,6 +51,16 @@ const initialState = [newTracker()]
 
 export default function activeTrackers(state = initialState, action) {
     switch (action.type) {
+    case "SET_CURRENT_PROJECT":
+        if(action.activeTrackers){
+            return [
+                ...state,
+                ...action.activeTrackers
+            ]
+        }
+        else{
+            return state
+        }
     case ADD_TRACKER:
         let tracker = newTracker()
         action.callback(tracker)

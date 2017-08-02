@@ -13,6 +13,11 @@ export default function closedTrackers(state = initialState, action) {
             ...state,
             closedTracker
         ]
+    case "SET_CLOSED_TRACKERS_FROM_PROJECT":
+        return [
+            ...state,
+            action.closedTrackers
+        ]
     default:
         return state
     }
